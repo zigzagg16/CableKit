@@ -1,0 +1,21 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "Connected" : {
+      "comment" : "Accessibility value of a socket that has a plug in it."
+    },
+    "Double tap to connect" : {
+      "comment" : "Accessibility hint on an empty socket."
+    },
+    "Double tap to disconnect" : {
+      "comment" : "Accessibility hint on a socket with a plug in it."
+    },
+    "Not connected" : {
+      "comment" : "Accessibility value of an empty socket."
+    },
+    "Socket" : {
+      "comment" : "Default accessibility label of a socket that has no name."
+    }
+  },
+  "version" : "1.0"
+}
