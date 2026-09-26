@@ -196,6 +196,15 @@ public final class SynthesizedCableSounds: CableSoundProvider {
     ///   (iOS only). Pass `false` when the host app owns its audio session.
     public init(configuresAudioSession: Bool = true) {
         self.configuresAudioSession = configuresAudioSession
+        #if os(iOS)
+        // The category now, synchronously — before this engine (or the haptics engine beside it) can touch the
+        // session. Setting it only in `startEngine`'s background block left a window where an activation ran
+        // under iOS's default `.soloAmbient`, which stops the Music app; Music doesn't resume when the category
+        // changes afterwards. Setting a category is cheap; activation (the slow part) stays off the main thread.
+        if configuresAudioSession {
+            try? AVAudioSession.sharedInstance().setCategory(.ambient, options: [.mixWithOthers])
+        }
+        #endif
         for _ in 0..<6 {
             let p = AVAudioPlayerNode()
             engine.attach(p)
@@ -354,6 +363,7 @@ public final class SynthesizedCableSounds: CableSoundProvider {
 
             if configuresAudioSession {
                 let session = AVAudioSession.sharedInstance()
+                // Again here as well as in `init`: something else in the app may have changed it since.
                 try? session.setCategory(.ambient, options: [.mixWithOthers])
                 try? session.setActive(true)
             }
